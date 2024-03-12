@@ -1,0 +1,61 @@
+
+//+------------------------------------------------------------------+
+//| Panda Hedging MT4                                                |
+//| Developer's site: forexroboteasy.com                             |
+//| Developed by: Forex Robot Easy Team                              |
+//+------------------------------------------------------------------+
+
+// Define necessary variables
+double initialLotSize = 0.01; // Initial lot size for opening orders
+int maxAdditionalOrders = 10; // Maximum number of additional orders
+double additionalLotSize = 0.01; // Lot size for additional orders
+int totalOrders = 0; // Total number of orders opened
+
+//+------------------------------------------------------------------+
+//| Expert initialization function                                   |
+//+------------------------------------------------------------------+
+int OnInit()
+{
+    // Set initial lot size
+    Lots = initialLotSize;
+    
+    return(INIT_SUCCEEDED);
+}
+
+//+------------------------------------------------------------------+
+//| Expert start function                                            |
+//+------------------------------------------------------------------+
+void OnTick()
+{
+    // Check if the price goes against the initial order
+    if (Bid < OrderOpenPrice())
+    {
+        // Open additional orders based on the author's algorithm
+        for (int i = 0; i < maxAdditionalOrders; i++)
+        {
+            if (totalOrders < maxAdditionalOrders)
+            {
+                totalOrders++;
+                OrderSend(Symbol(), OP_BUY, additionalLotSize, Ask, 0, 0, 0, 'Panda Hedging MT4', 0, 0, Green);
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    
+    // Continue with other trading functions
+    // ...
+}
+
+//+------------------------------------------------------------------+
+//| Expert deinitialization function                                 |
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason)
+{
+    // Perform necessary cleanup before deinitialization
+    // ...
+}
+
+//+------------------------------------------------------------------+
